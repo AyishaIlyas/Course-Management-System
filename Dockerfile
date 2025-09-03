@@ -1,19 +1,19 @@
-# Use OpenJDK 17
+# Stage 1: Build
 FROM openjdk:17-jdk-slim AS build
 
 WORKDIR /app
 
-# Copy Maven files
-COPY pom.xml mvnw ./
-COPY .mvn .mvn
+# Copy Maven files from backend folder
+COPY backend/pom.xml backend/mvnw ./
+COPY backend/.mvn .mvn
 
 # Copy source code
-COPY src src
+COPY backend/src src
 
 # Build the JAR inside Docker
 RUN ./mvnw clean package -DskipTests
 
-# Second stage: runtime
+# Stage 2: Runtime
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
